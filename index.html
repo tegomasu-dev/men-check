@@ -1,0 +1,555 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Googleマップ対策チェック</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 1 column, phone first. Hero -> prep note -> sticky progress -> 5 question groups -> result sheets (score sheet, action sheet) */
+:root {
+  --bg: #F1F5F6;
+  --surface: #FFFFFF;
+  --ink: #16232B;
+  --muted: #55656E;
+  --line: #D6DFE3;
+  --accent: #1F4E79;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E1EBF3;
+  --good: #266B42;
+  --good-soft: #DFF0E5;
+  --mid: #8A5600;
+  --mid-soft: #FAEAC8;
+  --bad: #A5382A;
+  --bad-soft: #F8DFD9;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --font-display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1A20; --surface: #17252D; --ink: #E8EEF1; --muted: #9FB0B9; --line: #2A3B44;
+    --accent: #86B8E6; --accent-ink: #0F1A20; --accent-soft: #1D3445;
+    --good: #6CC48C; --good-soft: #1B3527; --mid: #E0B05A; --mid-soft: #3A2E14; --bad: #EF8A78; --bad-soft: #3D211D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1A20; --surface: #17252D; --ink: #E8EEF1; --muted: #9FB0B9; --line: #2A3B44;
+  --accent: #86B8E6; --accent-ink: #0F1A20; --accent-soft: #1D3445;
+  --good: #6CC48C; --good-soft: #1B3527; --mid: #E0B05A; --mid-soft: #3A2E14; --bad: #EF8A78; --bad-soft: #3D211D;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  padding-block: 8px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-text-size-adjust: 100%;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+.wrap { max-width: 520px; margin: 0 auto; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+button, input { font: inherit; color: inherit; }
+
+/* hero */
+.hero { padding: 20px 0 8px; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .12em; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 9vw, 40px); line-height: 1.25; margin-top: 6px; letter-spacing: .02em; }
+.lead { margin-top: 12px; color: var(--muted); font-size: 15px; }
+
+/* prep note */
+.prep { margin-top: 18px; padding: 16px; border-radius: 12px; background: var(--accent-soft); display: grid; gap: 6px; }
+.prep h2 { font-size: 15px; color: var(--accent); }
+.prep p { font-size: 14px; }
+.prep b { font-weight: 700; }
+
+.shop { margin-top: 18px; display: grid; gap: 6px; }
+.shop label { font-size: 14px; font-weight: 700; }
+.shop small { color: var(--muted); font-size: 12.5px; font-weight: 400; }
+.shop input {
+  width: 100%; min-height: 48px; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface);
+}
+.shop input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+
+/* sticky progress */
+.sticky {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  margin-top: 20px; padding: 10px 0 8px; background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.sticky-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 700; }
+.sticky-row span:last-child { color: var(--muted); font-weight: 500; }
+.track { margin-top: 6px; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.track > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .25s ease; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* question groups */
+.group { margin-top: 28px; }
+.gh { display: grid; gap: 2px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+.gh h2 { font-size: 18px; font-weight: 700; }
+.gh p { font-size: 13px; color: var(--muted); }
+
+.q { padding: 18px 0 20px; border-bottom: 1px solid var(--line); scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 80px); }
+.q.attn { background: var(--bad-soft); margin-inline: -10px; padding-inline: 10px; border-radius: 10px; border-bottom-color: transparent; }
+.q-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.q-title { font-weight: 700; font-size: 16px; line-height: 1.55; min-width: 0; }
+.pill { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 0 8px; border-radius: 99px; background: var(--ink); color: var(--bg); margin-right: 6px; vertical-align: 2px; line-height: 1.7; }
+.q-w { flex: none; font-size: 12px; color: var(--muted); white-space: nowrap; padding-top: 2px; }
+.q-hint { margin-top: 4px; font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+.q-hint b { color: var(--accent); font-weight: 700; margin-right: 4px; }
+
+.seg { margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.opt { position: relative; min-width: 0; }
+.opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  min-height: 60px; padding: 6px 4px; border-radius: 12px; text-align: center;
+  background: var(--surface); border: 1.5px solid var(--line); line-height: 1.3;
+  transition: background .15s, border-color .15s;
+}
+.box .m { font-size: 20px; font-weight: 700; line-height: 1.1; color: var(--muted); }
+.box .t { font-size: 12.5px; font-weight: 500; }
+.opt:hover .box { border-color: var(--muted); }
+.opt input:focus-visible + .box { outline: 3px solid var(--accent); outline-offset: 2px; }
+.opt.y input:checked + .box { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.opt.p input:checked + .box { background: var(--mid-soft); border-color: var(--mid); color: var(--mid); }
+.opt.n input:checked + .box { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.opt input:checked + .box .m { color: inherit; }
+.opt input:checked + .box .t { font-weight: 700; }
+
+/* go button */
+.go { margin-top: 28px; display: grid; gap: 10px; }
+.btn {
+  min-height: 52px; padding: 10px 18px; border-radius: 12px; border: 0; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 17px;
+}
+.btn:focus-visible, .btn2:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn2 {
+  min-height: 48px; padding: 8px 16px; border-radius: 12px; cursor: pointer;
+  background: transparent; border: 1.5px solid var(--line); font-weight: 700; font-size: 15px;
+}
+.msg { min-height: 22px; font-size: 14px; color: var(--bad); font-weight: 700; text-align: center; }
+
+/* result */
+.result { margin-top: 36px; display: grid; gap: 16px; scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 70px); }
+.result-lead { font-size: 13px; color: var(--muted); text-align: center; }
+.sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 20px 18px 16px; display: grid; gap: 18px; }
+.sheet-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; font-size: 12.5px; color: var(--muted); }
+.sheet-head b { color: var(--ink); font-size: 13.5px; }
+.shopname { font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1.4; overflow-wrap: anywhere; }
+
+.score { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center; }
+.ring { position: relative; width: 132px; height: 132px; }
+.ring svg { display: block; width: 100%; height: 100%; }
+.ring .bg { fill: none; stroke: var(--line); stroke-width: 10; }
+.ring .arc { fill: none; stroke: var(--ring); stroke-width: 10; stroke-linecap: round; }
+.ring-n { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ring-n strong { font-family: var(--font-display); font-weight: 800; font-size: 46px; line-height: 1; color: var(--ring); font-variant-numeric: tabular-nums; }
+.ring-n span { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.band-good { --ring: var(--good); }
+.band-mid { --ring: var(--mid); }
+.band-bad { --ring: var(--bad); }
+.verdict h2 { font-size: 19px; font-weight: 700; line-height: 1.45; }
+.verdict p { margin-top: 6px; font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+.counts { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 12.5px; font-weight: 700; padding: 2px 10px; border-radius: 99px; font-variant-numeric: tabular-nums; }
+.chip.y { background: var(--good-soft); color: var(--good); }
+.chip.p { background: var(--mid-soft); color: var(--mid); }
+.chip.n { background: var(--bad-soft); color: var(--bad); }
+
+.bars h3 { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+.bar { display: grid; grid-template-columns: 5.2em minmax(0, 1fr) 3em; gap: 10px; align-items: center; font-size: 13.5px; padding: 3px 0; }
+.bar .lab { font-weight: 700; }
+.bar .bt { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar .bt i { display: block; height: 100%; border-radius: 99px; background: var(--ring); }
+.bar .pc { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.sheet-foot { font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+
+.act-title { font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.35; }
+.act-sub { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+.acts { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.act { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.act:first-child { border-top: 0; padding-top: 0; }
+.rank { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; }
+.act h3 { font-size: 16.5px; font-weight: 700; line-height: 1.5; }
+.act-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.tag { font-size: 12px; font-weight: 700; padding: 0 9px; border-radius: 99px; line-height: 1.8; font-variant-numeric: tabular-nums; }
+.tag.n { background: var(--bad-soft); color: var(--bad); }
+.tag.p { background: var(--mid-soft); color: var(--mid); }
+.tag.gain { background: var(--accent-soft); color: var(--accent); }
+.tag.time { background: transparent; border: 1px solid var(--line); color: var(--muted); font-weight: 500; }
+.act p { margin-top: 8px; font-size: 14.5px; line-height: 1.75; }
+.done-msg { font-size: 15px; line-height: 1.8; }
+
+.all { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.all summary { cursor: pointer; padding: 14px 16px; font-weight: 700; font-size: 15px; min-height: 48px; }
+.all summary:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; border-radius: 14px; }
+.all ul { list-style: none; margin: 0; padding: 0 16px 8px; }
+.all li { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.55; }
+.all .st { font-weight: 700; font-size: 12.5px; white-space: nowrap; }
+.all .st.y, .all .mk.y { color: var(--good); }
+.all .st.p, .all .mk.p { color: var(--mid); }
+.all .st.n, .all .mk.n { color: var(--bad); }
+.all .mk { font-weight: 700; text-align: center; }
+
+.tools { display: grid; gap: 10px; }
+.copyarea { width: 100%; min-height: 150px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; line-height: 1.6; }
+.copynote { font-size: 13px; color: var(--muted); text-align: center; min-height: 20px; }
+
+.foot { margin-top: 36px; font-size: 12.5px; color: var(--muted); line-height: 1.75; display: grid; gap: 6px; }
+
+@media (max-width: 360px) {
+  .score { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .box .t { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track > i, .box { transition: none; }
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">整体院の先生へ</p>
+    <h1>Googleマップ<br>対策チェック</h1>
+    <p class="lead">14の質問に答えるだけです。5分ほどで、100点満点の点数と「まず直すこと」が3つ分かります。</p>
+  </header>
+
+  <section class="prep" aria-labelledby="prep-h">
+    <h2 id="prep-h">始める前に</h2>
+    <p>スマホでGoogleマップを開き、<b>自分のお店の名前で検索</b>しておくと、答えやすくなります。</p>
+    <p>お客さまがマップで見る自分のお店の画面を、ここでは「自店ページ」と呼びます。</p>
+  </section>
+
+  <div class="shop">
+    <label for="shopName">お店の名前 <small>(入れなくても大丈夫です。結果の画面に表示するだけです)</small></label>
+    <input id="shopName" type="text" autocomplete="off" maxlength="40" placeholder="例:○○整体院">
+  </div>
+
+  <div class="sticky" id="bar">
+    <div class="sticky-row"><span>答えた数 <span class="num" id="cnt">0 / 14</span></span><span id="remain">あと14問</span></div>
+    <div class="track" aria-hidden="true"><i id="fill"></i></div>
+  </div>
+
+  <form id="form" novalidate>
+    <div id="groups"></div>
+    <div class="go">
+      <button type="submit" class="btn" id="goBtn">結果を見る</button>
+      <p class="msg" id="msg" role="status"></p>
+    </div>
+  </form>
+
+  <section class="result" id="result" hidden aria-live="polite"></section>
+
+  <footer class="foot">
+    <p>この点数は、直す順番を決めるための目安です。Googleマップでの順位を表すものではありません。</p>
+    <p>入力した内容は保存も送信もされません。ページを閉じると消えます。Googleの画面の名前は、更新で変わることがあります。</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 配点の合計は100点
+  var ITEMS = [
+    { w: 14, t: "Googleのオーナー確認が済んでいる", top: true,
+      check: "Googleで自店名を検索し、自分のアカウントで「プロフィールを編集」などの管理ボタンが出れば済んでいます。",
+      fix: "Googleで自店名を検索し、「このビジネスのオーナーですか?」から手続きします。届いたコードなどで本人確認をします。これが済まないと、ほかの項目を自分で直せません。",
+      time: "手続きに数日かかることも" },
+    { w: 10, t: "店名・住所・電話番号が正確",
+      check: "スマホのGoogleマップで自店ページを開き、看板や名刺と見比べます。",
+      fix: "お店の情報を直す画面(管理画面)で、店名・住所・電話番号を看板や名刺とまったく同じに直します。店名に「肩こり」などの言葉を足すのはやめましょう。",
+      time: "5分" },
+    { w: 9, t: "メインカテゴリが適切(整体院など)",
+      check: "自店ページの店名の下に出る業種が、お店の中心の施術に合っているか見ます。",
+      fix: "メインカテゴリは、いちばん力を入れている施術に近いものを1つ選びます。追加のカテゴリは、実際にやっている施術だけにします。",
+      time: "5分" },
+    { w: 8, t: "営業時間・定休日が最新(祝日も)",
+      check: "自店ページの営業時間を、今週の実際の予定と見比べます。",
+      fix: "営業時間と定休日を今の内容に直します。祝日、年末年始、臨時休業は「特別営業時間」に入れておくと、お客さまが迷いません。",
+      time: "10分" },
+    { w: 6, t: "ホームページか予約ページのURLが登録済み",
+      check: "自店ページに「ウェブサイト」のボタンがあり、押すと正しいページが開くか確かめます。",
+      fix: "ホームページか予約ページのURLを登録します。登録したら、自分のスマホでボタンを押して、正しく開くか確かめましょう。",
+      time: "5分" },
+    { w: 5, t: "紹介文が入力済み",
+      check: "自店ページの「概要」に、お店の紹介文が出ているか見ます。",
+      fix: "「どんなお悩みの方に、どんな施術をしているか」を、やさしい言葉で書きます。750文字までです。電話番号やURLは入れないようにします。",
+      time: "15分" },
+    { w: 5, t: "メニュー・サービスを登録済み",
+      check: "自店ページに「メニュー」か「サービス」があり、料金が出ているか見ます。",
+      fix: "管理画面の「サービス」(または「メニュー」)に、コースの名前・時間・料金を入れます。初めての方が、来る前に料金を知れて安心します。",
+      time: "20分" },
+    { w: 7, t: "写真が10枚以上(外観・内観・施術風景)",
+      check: "自店ページの「写真」で、枚数と、外観・内観・施術の写真があるか見ます。",
+      fix: "スマホで、外観、入口、院内、施術の様子(お客さまの許可がある範囲で)、先生の写真を撮って追加します。明るい昼間に撮るときれいです。",
+      time: "30分" },
+    { w: 4, t: "直近1か月以内に写真を追加",
+      check: "自店ページの「写真」を新しい順に見て、いちばん新しい写真の日付を確かめます。",
+      fix: "月に2〜3枚で十分です。季節の飾りつけ、院内の変更、新しい器具など、変わったことを撮って追加します。",
+      time: "10分" },
+    { w: 9, t: "クチコミ件数が20件以上",
+      check: "自店ページの星の横に出ている、クチコミの件数を見ます。",
+      fix: "施術のあとに「よろしければ感想を教えてください」と声をかけます。管理画面でクチコミ用のリンクやQRコードを出せるので、受付に置きましょう。お礼の品と引きかえにお願いするのは禁止です。",
+      time: "今日から声かけ" },
+    { w: 6, t: "最近のクチコミに返信している",
+      check: "自店ページのクチコミ欄で、新しい投稿にお店からの返信がついているか見ます。",
+      fix: "新しいクチコミに、1〜2週間以内に返信します。「ありがとうございます」に、その方の感想に触れたひと言を足すと、気持ちが伝わります。",
+      time: "1件3分" },
+    { w: 4, t: "低評価にも丁寧に返信している",
+      check: "星1〜3のクチコミに返信があるか見ます。低評価がまだなければ「できている」を選んでください。",
+      fix: "言いわけはせず、まずお詫びと、受けとめた内容を書きます。改善することと、連絡先も添えます。症状や施術内容など、その方が特定される内容は書かないでください。",
+      time: "1件10分" },
+    { w: 6, t: "「最新情報」の投稿が月1回以上",
+      check: "自店ページの「最新情報」欄で、投稿の日付を見ます。",
+      fix: "月に1回、お知らせを短く投稿します。休診日の案内、季節の体のケア、新メニューなどを、写真つきで書きましょう。",
+      time: "15分" },
+    { w: 7, t: "ホットペッパーやHPと店名・住所・電話が一致",
+      check: "ホットペッパーやホームページを開き、Googleの店名・住所・電話と、1文字ずつ見比べます。",
+      fix: "書き方を1つに決めて、ほかをそろえます。ビル名、ハイフン、全角と半角の違いも見直しましょう。表記がバラバラだと、同じお店と分かりにくくなります。",
+      time: "30分" }
+  ];
+  // 画面に出す順番は、お店の土台から発信の順(番号は診断項目の0〜13)
+  var GROUPS = [
+    { name: "お店の土台", sub: "ここが整っていないと、ほかが効きません", ids: [0, 1, 13] },
+    { name: "お店の紹介", sub: "初めての方が、来る前に見るところです", ids: [2, 3, 4, 5, 12] },
+    { name: "写真", sub: "「どんなお店か」が一番伝わります", ids: [6, 7] },
+    { name: "クチコミ", sub: "来るかどうかを決める材料になります", ids: [8, 9, 10] },
+    { name: "お知らせ", sub: "「今もやっているお店」だと伝わります", ids: [11] }
+  ];
+  // ITEMS は書いた順に、診断項目の番号(0〜13)を割り当てて並べ直す
+  var BY_ID = {};
+  var ID_MAP = [0, 1, 2, 3, 4, 5, 12, 6, 7, 8, 9, 10, 11, 13];
+  ITEMS.forEach(function (it, idx) { it.id = ID_MAP[idx]; BY_ID[it.id] = it; });
+  ITEMS.sort(function (a, b) { return a.id - b.id; });
+
+  var F = { y: 1, p: 0.5, n: 0 };
+  var LAB = { y: "できている", p: "一部", n: "できていない" };
+  var MARK = { y: "○", p: "△", n: "×" };
+  var TOTAL = ITEMS.length;
+  var ans = {};
+  var shown = false;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+  var fmt = function (n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); };
+
+  /* ---------- 質問を描く ---------- */
+  function qEl(it) {
+    var d = document.createElement("div");
+    d.className = "q";
+    d.id = "q" + it.id;
+    var opts = ["y", "p", "n"].map(function (k) {
+      return '<label class="opt ' + k + '"><input type="radio" name="r' + it.id + '" value="' + k + '">' +
+        '<span class="box"><span class="m" aria-hidden="true">' + MARK[k] + '</span><span class="t">' + LAB[k] + '</span></span></label>';
+    }).join("");
+    d.innerHTML =
+      '<div class="q-top"><div class="q-title" id="qt' + it.id + '">' + (it.top ? '<span class="pill">最重要</span>' : '') + esc(it.t) + '</div>' +
+      '<div class="q-w">配点 ' + it.w + '点</div></div>' +
+      '<p class="q-hint"><b>確認方法</b>' + esc(it.check) + '</p>' +
+      '<div class="seg" role="radiogroup" aria-labelledby="qt' + it.id + '">' + opts + '</div>';
+    return d;
+  }
+  var gEl = $("groups");
+  GROUPS.forEach(function (g) {
+    var s = document.createElement("section");
+    s.className = "group";
+    s.innerHTML = '<div class="gh"><h2>' + g.name + '(' + g.ids.length + '問)</h2><p>' + g.sub + '</p></div>';
+    g.ids.forEach(function (id) { s.appendChild(qEl(BY_ID[id])); });
+    gEl.appendChild(s);
+  });
+
+  /* ---------- 点数の計算 ---------- */
+  function calc() {
+    var total = 0;
+    ITEMS.forEach(function (it) { total += it.w * (F[ans[it.id]] || 0); });
+    var groups = GROUPS.map(function (g) {
+      var got = 0, max = 0;
+      g.ids.forEach(function (id) { var it = BY_ID[id]; max += it.w; got += it.w * (F[ans[id]] || 0); });
+      return { name: g.name, pct: Math.round(got / max * 100) };
+    });
+    var list = ITEMS.filter(function (it) { return ans[it.id] !== "y"; }).map(function (it) {
+      return { it: it, loss: it.w * (1 - F[ans[it.id]]), st: ans[it.id] };
+    });
+    list.sort(function (a, b) {
+      if (a.it.id === 0) return -1;      // オーナー確認が未完了なら、必ず最初
+      if (b.it.id === 0) return 1;
+      return (b.loss - a.loss) || (b.it.w - a.it.w) || (a.it.id - b.it.id);
+    });
+    var cnt = { y: 0, p: 0, n: 0 };
+    ITEMS.forEach(function (it) { cnt[ans[it.id]]++; });
+    return { score: Math.round(total), groups: groups, top: list.slice(0, 3), cnt: cnt };
+  }
+  function band(n) { return n >= 80 ? "good" : n >= 50 ? "mid" : "bad"; }
+  function verdict(n) {
+    if (n >= 80) return ["とても良い状態です", "このまま、写真・クチコミ・お知らせを少しずつ足していきましょう。"];
+    if (n >= 60) return ["あと一歩です", "土台はできています。下の3つを直すと、さらに見つけてもらいやすくなります。"];
+    if (n >= 40) return ["伸びしろがたくさんあります", "直すところが見つかった、ということです。まず下の3つから進めましょう。"];
+    return ["まずは土台づくりから", "ここからが一番伸びる時期です。下の順番で、1つずつ進めましょう。"];
+  }
+
+  /* ---------- 結果を描く ---------- */
+  function dateText() {
+    try { return new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" }); }
+    catch (e) { return ""; }
+  }
+  function render() {
+    var r = calc();
+    var b = band(r.score);
+    var v = verdict(r.score);
+    var shop = $("shopName").value.trim();
+    var C = 2 * Math.PI * 52;
+    var dash = (C * r.score / 100).toFixed(1);
+    var date = dateText();
+
+    var bars = r.groups.map(function (g) {
+      return '<div class="bar band-' + band(g.pct) + '"><span class="lab">' + g.name + '</span>' +
+        '<span class="bt"><i style="width:' + g.pct + '%"></i></span><span class="pc">' + g.pct + '%</span></div>';
+    }).join("");
+
+    var acts;
+    if (r.top.length === 0) {
+      acts = '<p class="done-msg">すべて「できている」です。すばらしい状態です。月に1回、写真の追加・お知らせの投稿・クチコミへの返信を続けていきましょう。</p>';
+    } else {
+      acts = '<ol class="acts">' + r.top.map(function (x, i) {
+        return '<li class="act"><span class="rank" aria-hidden="true">' + (i + 1) + '</span><div>' +
+          '<h3>' + esc(x.it.t) + '</h3>' +
+          '<div class="act-tags"><span class="tag ' + x.st + '">' + (x.st === "n" ? "まだできていない" : "一部できている") + '</span>' +
+          '<span class="tag gain">直すと最大 +' + fmt(x.loss) + '点</span>' +
+          '<span class="tag time">目安 ' + esc(x.it.time) + '</span></div>' +
+          '<p>' + esc(x.it.fix) + '</p></div></li>';
+      }).join("") + '</ol>';
+    }
+
+    var allList = ITEMS.map(function (it) {
+      var k = ans[it.id];
+      return '<li><span class="mk ' + k + '" aria-hidden="true">' + MARK[k] + '</span><span>' + esc(it.t) + '</span><span class="st ' + k + '">' + LAB[k] + '</span></li>';
+    }).join("");
+
+    $("result").innerHTML =
+      '<p class="result-lead">スクリーンショットは、下の2枚のカードを1枚ずつ撮ると見やすくなります。</p>' +
+      '<article class="sheet band-' + b + '" aria-label="点数">' +
+        '<div class="sheet-head"><b>Googleマップ対策チェック</b><span>' + esc(date) + '</span></div>' +
+        (shop ? '<p class="shopname">' + esc(shop) + '</p>' : '') +
+        '<div class="score"><div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true">' +
+          '<circle class="bg" cx="60" cy="60" r="52"></circle>' +
+          '<circle class="arc" cx="60" cy="60" r="52" stroke-dasharray="' + dash + ' ' + C.toFixed(1) + '" transform="rotate(-90 60 60)"></circle></svg>' +
+          '<div class="ring-n"><strong>' + r.score + '</strong><span>/ 100点</span></div></div>' +
+          '<div class="verdict"><h2>' + v[0] + '</h2><p>' + v[1] + '</p></div></div>' +
+        '<div class="counts"><span class="chip y">できている ' + r.cnt.y + '</span><span class="chip p">一部 ' + r.cnt.p + '</span><span class="chip n">できていない ' + r.cnt.n + '</span></div>' +
+        '<div class="bars"><h3>分野ごとのできぐあい</h3>' + bars + '</div>' +
+        '<div class="sheet-foot"><span>目安の点数です(Googleの順位ではありません)</span></div>' +
+      '</article>' +
+      '<article class="sheet" aria-label="まず直すこと">' +
+        '<div><h2 class="act-title">まず直すこと</h2><p class="act-sub">点数が上がりやすい順に並べています。上から1つずつ進めてください。</p></div>' +
+        acts +
+        '<div class="sheet-foot"><span>Googleマップ対策チェック</span><span>' + esc(date) + '</span></div>' +
+      '</article>' +
+      '<details class="all"><summary>14項目の結果を見る</summary><ul>' + allList + '</ul></details>' +
+      '<div class="tools">' +
+        '<button type="button" class="btn2" id="copyBtn">結果をテキストでコピー</button>' +
+        '<textarea class="copyarea" id="copyArea" readonly hidden aria-label="コピー用の結果"></textarea>' +
+        '<p class="copynote" id="copyNote" role="status"></p>' +
+        '<button type="button" class="btn2" id="resetBtn">もう一度やり直す</button>' +
+      '</div>';
+
+    $("copyBtn").addEventListener("click", function () { copyResult(r, shop, date); });
+    $("resetBtn").addEventListener("click", reset);
+  }
+
+  function copyResult(r, shop, date) {
+    var lines = ["Googleマップ対策チェック(" + date + ")"];
+    if (shop) lines.push("お店:" + shop);
+    lines.push("点数:" + r.score + " / 100点", "", "まず直すこと");
+    if (r.top.length === 0) lines.push("すべて「できている」です。");
+    r.top.forEach(function (x, i) {
+      lines.push((i + 1) + ". " + x.it.t + "(直すと最大 +" + fmt(x.loss) + "点)");
+    });
+    var text = lines.join("\n");
+    var note = $("copyNote"), area = $("copyArea");
+    var fallback = function () {
+      area.hidden = false; area.value = text; area.focus(); area.select();
+      note.textContent = "自動でコピーできませんでした。上の文字を長押ししてコピーしてください。";
+    };
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        note.textContent = "コピーしました。";
+      }, fallback);
+    } catch (e) { fallback(); }
+  }
+
+  /* ---------- 進みぐあい ---------- */
+  function progress() {
+    var n = Object.keys(ans).length;
+    $("cnt").textContent = n + " / " + TOTAL;
+    $("fill").style.width = (n / TOTAL * 100) + "%";
+    $("remain").textContent = n === TOTAL ? "全部答えました" : "あと" + (TOTAL - n) + "問";
+  }
+
+  function smooth() {
+    var reduce = false;
+    try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+    return reduce ? "auto" : "smooth";
+  }
+
+  $("form").addEventListener("change", function (e) {
+    var t = e.target;
+    if (!t || t.type !== "radio") return;
+    var id = Number(t.name.slice(1));
+    ans[id] = t.value;
+    var q = $("q" + id);
+    if (q) q.classList.remove("attn");
+    progress();
+    $("msg").textContent = "";
+    if (shown) render();
+  });
+  $("shopName").addEventListener("input", function () { if (shown) render(); });
+
+  $("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var missing = ITEMS.filter(function (it) { return !ans[it.id]; });
+    document.querySelectorAll(".q.attn").forEach(function (q) { q.classList.remove("attn"); });
+    if (missing.length) {
+      missing.forEach(function (it) { $("q" + it.id).classList.add("attn"); });
+      $("msg").textContent = "まだ答えていない質問が " + missing.length + "つ あります。赤い部分に答えてください。";
+      $("q" + missing[0].id).scrollIntoView({ behavior: smooth(), block: "start" });
+      return;
+    }
+    $("msg").textContent = "";
+    shown = true;
+    render();
+    $("result").hidden = false;
+    $("result").scrollIntoView({ behavior: smooth(), block: "start" });
+  });
+
+  function reset() {
+    ans = {}; shown = false;
+    document.querySelectorAll("#form input[type=radio]").forEach(function (i) { i.checked = false; });
+    document.querySelectorAll(".q.attn").forEach(function (q) { q.classList.remove("attn"); });
+    $("result").hidden = true;
+    $("result").innerHTML = "";
+    $("msg").textContent = "";
+    progress();
+    window.scrollTo({ top: 0, behavior: smooth() });
+  }
+
+  progress();
+})();
+</script>
+
+</body></html>
